@@ -1,5 +1,7 @@
 # Autochecker
 
+### Automatically check for available Global Entry appointments and be notified on the Pushover app when one becomes available.
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
