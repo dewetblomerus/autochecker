@@ -22,7 +22,7 @@ defmodule Autochecker.Poller do
   @impl true
   def handle_info(:poll, %__MODULE__{poll_count: count} = state) do
     Logger.info(%{poll_count: count})
-    PubSub.broadcast(:autochecker_pubsub, "poll", state)
+    broadcast(state)
 
     {:noreply, %__MODULE__{perform_poll(state) | poll_count: count + 1}}
   end
@@ -32,17 +32,29 @@ defmodule Autochecker.Poller do
     {:reply, state, state}
   end
 
+  @impl true
+  def handle_cast(:reset, %__MODULE__{} = state) do
+    broadcast(state)
+    schedule_poll()
+    {:noreply, %__MODULE__{state | poll_count: 0, notified: false}}
+  end
+
   def perform_poll(%__MODULE__{poll_func: poll_func, notified: false} = state) do
     Logger.info("Checking for appointments")
 
     if poll_func.() do
       notify()
-
-      %__MODULE__{state | notified: true}
+      state = %__MODULE__{state | notified: true}
+      broadcast(state)
+      state
     else
       schedule_poll()
       %__MODULE__{state | notified: false}
     end
+  end
+
+  def broadcast(state) do
+    PubSub.broadcast(:autochecker_pubsub, "poll", state)
   end
 
   def schedule_poll() do
@@ -62,7 +74,12 @@ defmodule Autochecker.Poller do
     })
   end
 
-  def get_state() do
+  def get_status() do
     GenServer.call(__MODULE__, :get_state)
+    |> Map.take([:notified, :poll_count])
+  end
+
+  def reset() do
+    GenServer.cast(__MODULE__, :reset)
   end
 end

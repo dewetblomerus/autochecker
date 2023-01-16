@@ -1,5 +1,6 @@
 defmodule AutocheckerWeb.HomeLive do
   use AutocheckerWeb, :live_view
+  require Logger
   alias Phoenix.PubSub
   alias Autochecker.Poller
 
@@ -11,20 +12,29 @@ defmodule AutocheckerWeb.HomeLive do
     <h1>
       Notification sent: <%= @notified %>
     </h1>
+    <.button id="recheck" phx-click="recheck" phx-disable-with class="py-2 px-3">
+      Check Again
+    </.button>
     """
   end
 
   def mount(_params, _session, socket) do
     PubSub.subscribe(:autochecker_pubsub, "poll")
-    poller_state = Poller.get_state()
+    poller_state = Poller.get_status()
     {:ok, assign_state(poller_state, socket)}
   end
 
-  def handle_info(%Autochecker.Poller{} = poller_state, socket) do
-    {:noreply, assign_state(poller_state, socket)}
+  def handle_event("recheck", %{"value" => ""}, socket) do
+    Logger.warn("rechecking")
+    Poller.reset()
+    {:noreply, socket}
   end
 
-  def assign_state(%Autochecker.Poller{notified: notified, poll_count: poll_count}, socket) do
+  def handle_info(poller_status, socket) do
+    {:noreply, assign_state(poller_status, socket)}
+  end
+
+  def assign_state(%{notified: notified, poll_count: poll_count}, socket) do
     assign(socket, poll_count: poll_count, notified: notified)
   end
 end
