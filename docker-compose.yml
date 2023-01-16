@@ -6,6 +6,7 @@ services:
     environment:
       - PUSHOVER_TOKEN=${PUSHOVER_TOKEN}
       - PUSHOVER_USER=${PUSHOVER_USER}
+      - LOCATION_ID=${LOCATION_ID}
     ports:
       - 4000:4000
     restart: unless-stopped
