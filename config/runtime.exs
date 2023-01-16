@@ -1,5 +1,11 @@
 import Config
 
+unless config_env() == :test do
+  config :autochecker,
+    pushover_token: System.fetch_env!("PUSHOVER_TOKEN"),
+    pushover_user: System.fetch_env!("PUSHOVER_USER")
+end
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration

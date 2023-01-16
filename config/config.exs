@@ -14,7 +14,7 @@ config :autochecker, AutocheckerWeb.Endpoint,
     formats: [html: AutocheckerWeb.ErrorHTML, json: AutocheckerWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Autochecker.PubSub,
+  pubsub_server: :autochecker_pubsub,
   live_view: [signing_salt: "aNwNTUxC"]
 
 # Configures the mailer

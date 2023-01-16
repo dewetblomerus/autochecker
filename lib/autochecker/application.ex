@@ -7,17 +7,22 @@ defmodule Autochecker.Application do
 
   @impl true
   def start(_type, _args) do
+    atlanta_id = 5182
+    # hidalgo has appointments available for testing the notification system
+    hidalgo_id = 5001
+    poll_atlanta = fn -> Autochecker.DHS.appointments_available_at(atlanta_id) end
+
     children = [
       # Start the Telemetry supervisor
       AutocheckerWeb.Telemetry,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Autochecker.PubSub},
+      {Phoenix.PubSub, name: :autochecker_pubsub},
       # Start Finch
       {Finch, name: Autochecker.Finch},
       # Start the Endpoint (http/https)
-      AutocheckerWeb.Endpoint
+      AutocheckerWeb.Endpoint,
       # Start a worker by calling: Autochecker.Worker.start_link(arg)
-      # {Autochecker.Worker, arg}
+      {Autochecker.Poller, poll_atlanta}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
