@@ -13,7 +13,7 @@ defmodule AutocheckerWeb.HomeLive do
       Notification sent: <%= @notified %>
     </h1>
     <.button id="recheck" phx-click="recheck" phx-disable-with class="py-2 px-3">
-      Check Again
+      Reset
     </.button>
     """
   end
