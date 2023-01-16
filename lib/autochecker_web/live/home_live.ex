@@ -6,6 +6,8 @@ defmodule AutocheckerWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
+    <a href="https://ttp.cbp.dhs.gov/" target="_blank">DHS Travel Program</a>
+
     <h1>
       I have checked <%= @poll_count %> times
     </h1>
