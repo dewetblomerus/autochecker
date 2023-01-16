@@ -15,7 +15,7 @@ defmodule Autochecker.DHS do
       [] ->
         false
 
-      body ->
+      _ ->
         true
     end
   end
