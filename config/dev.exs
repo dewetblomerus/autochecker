@@ -1,4 +1,7 @@
 import Config
+# hidalgo id for testing: 5001, atlanta id: 5182
+config :autochecker,
+  location_id: 5182
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

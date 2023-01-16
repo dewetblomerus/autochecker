@@ -7,10 +7,9 @@ defmodule Autochecker.Application do
 
   @impl true
   def start(_type, _args) do
-    atlanta_id = 5182
+    location_id = Application.fetch_env!(:autochecker, :location_id)
     # hidalgo has appointments available for testing the notification system
-    hidalgo_id = 5001
-    poll_atlanta = fn -> Autochecker.DHS.appointments_available_at(atlanta_id) end
+    poll_atlanta = fn -> Autochecker.DHS.appointments_available_at(location_id) end
 
     children = [
       # Start the Telemetry supervisor
