@@ -2,6 +2,17 @@
 
 ### Automatically check for available Global Entry appointments and be notified on the Pushover app when one becomes available.
 
+I have the Pushover env vars set up on my laptop for dev.
+
+Deployment with docker compose on the Raspberry Pi where I am running this, I create a `.env` file for Docker Compose to use.
+
+`cp .env.example .env`
+
+Fill in your details
+
+`docker-compose up --build -d`
+
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
